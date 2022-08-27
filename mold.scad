@@ -1,18 +1,34 @@
 $fa = 1;
 $fs = 0.2;
 
+base_r = 21;
 thickness = 5;
-cylinder(h = thickness, r = 21, center = true);
 
 petals = 12;
 full_circle = 360;
 angle = 360 / petals;
 petal_r = 22.6;
 petal_center = 15.07;
-for (angle = [0 : angle : full_circle - angle]) {
-  rotate([0, 0, angle])
-    translate([0, petal_center, 0])
-      cylinder(h = thickness, r = petal_r - petal_center, center = true);
+
+outer_thickness = 3.1;
+
+intersection() {
+  union () {
+    cylinder(h = thickness, r = base_r, center = true);
+    for (angle = [0 : angle : full_circle - angle]) {
+      rotate([0, 0, angle])
+        translate([0, petal_center, 0])
+          cylinder(h = thickness, r = petal_r - petal_center, center = true);
+    }
+  }
+  union () {
+    translate([0, 0, (outer_thickness - thickness) / 2]) {
+      cylinder(h = outer_thickness, r = petal_r, center = true);
+      translate([0, 0, thickness / 2]) {
+        cylinder(h = thickness - outer_thickness, r1 = petal_r, r2 = base_r, center=true);
+      }
+    }
+  }
 }
 
 jaws_distance = 26.2;
