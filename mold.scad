@@ -1,6 +1,8 @@
 $fa = 1;
 $fs = 0.2;
 
+e = 0.001;
+
 base_r = 21;
 thickness = 5;
 
@@ -13,23 +15,31 @@ petal_center = 15.07;
 top_slope = 1.9;
 bottom_slope = 1;
 
-intersection() {
-  union () {
-    cylinder(h = thickness, r = base_r, center = true);
-    for (angle = [0 : angle : full_circle - angle]) {
-      rotate([0, 0, angle])
-        translate([0, petal_center, 0])
-          cylinder(h = thickness, r = petal_r - petal_center, center = true);
+carve_thickness = 3;
+carve_shrink = 2;
+
+difference() {
+  intersection() {
+    union () {
+      cylinder(h = thickness, r = base_r, center = true);
+      for (angle = [0 : angle : full_circle - angle]) {
+        rotate([0, 0, angle])
+          translate([0, petal_center, 0])
+            cylinder(h = thickness, r = petal_r - petal_center, center = true);
+      }
+    }
+    union () {
+      translate([0, 0, (bottom_slope - top_slope) / 2])
+        cylinder(h = thickness - top_slope - bottom_slope, r = petal_r, center = true);
+      translate([0, 0, (thickness - top_slope) / 2])
+        cylinder(h = top_slope, r1 = petal_r, r2 = base_r, center=true);
+      translate([0, 0, (bottom_slope - thickness) / 2])
+        cylinder(h = bottom_slope, r1 = base_r, r2 = petal_r, center=true);
     }
   }
-  union () {
-    translate([0, 0, (bottom_slope - top_slope) / 2])
-      cylinder(h = thickness - top_slope - bottom_slope, r = petal_r, center = true);
-    translate([0, 0, (thickness - top_slope) / 2])
-      cylinder(h = top_slope, r1 = petal_r, r2 = base_r, center=true);
-    translate([0, 0, (bottom_slope - thickness) / 2])
-      cylinder(h = bottom_slope, r1 = base_r, r2 = petal_r, center=true);
-  }
+  translate([0, 0, thickness / 2])
+    carve(carve_thickness, carve_shrink)
+      text("fox", size = 20, halign = "center", valign = "center");
 }
 
 jaws_distance = 26.2;
@@ -45,4 +55,15 @@ for (angle = [0 : full_circle / 2 : full_circle]) {
       translate([0, jaw_depth / 2 + jaw_tooth_depth / 2, jaw_tooth_height / 2 - jaw_height / 2])
         cube([jaw_width, jaw_tooth_depth, jaw_tooth_height], center = true);
     }
+}
+
+module carve(thickness, shrink, slices = 20) {
+  t = thickness / slices;
+  s = shrink / slices;
+  for (i = [1 : slices]) {
+    translate([0, 0, -i * t])
+      linear_extrude(height = t + e)
+        offset(delta = -i * s)
+          children();
+  }
 }
