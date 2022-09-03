@@ -10,7 +10,8 @@ angle = 360 / petals;
 petal_r = 22.6;
 petal_center = 15.07;
 
-outer_thickness = 3.1;
+top_slope = 1.9;
+bottom_slope = 1;
 
 intersection() {
   union () {
@@ -22,12 +23,12 @@ intersection() {
     }
   }
   union () {
-    translate([0, 0, (outer_thickness - thickness) / 2]) {
-      cylinder(h = outer_thickness, r = petal_r, center = true);
-      translate([0, 0, thickness / 2]) {
-        cylinder(h = thickness - outer_thickness, r1 = petal_r, r2 = base_r, center=true);
-      }
-    }
+    translate([0, 0, (bottom_slope - top_slope) / 2])
+      cylinder(h = thickness - top_slope - bottom_slope, r = petal_r, center = true);
+    translate([0, 0, (thickness - top_slope) / 2])
+      cylinder(h = top_slope, r1 = petal_r, r2 = base_r, center=true);
+    translate([0, 0, (bottom_slope - thickness) / 2])
+      cylinder(h = bottom_slope, r1 = base_r, r2 = petal_r, center=true);
   }
 }
 
