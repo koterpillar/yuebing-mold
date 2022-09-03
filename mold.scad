@@ -57,13 +57,11 @@ for (angle = [0 : full_circle / 2 : full_circle]) {
     }
 }
 
-module carve(thickness, shrink, slices = 20) {
-  t = thickness / slices;
-  s = shrink / slices;
-  for (i = [1 : slices]) {
-    translate([0, 0, -i * t])
-      linear_extrude(height = t + e)
-        offset(delta = -i * s)
+module carve(thickness, shrink, slice_thickness = 0.1) {
+  for (t = [0 : slice_thickness : thickness]) {
+    translate([0, 0, -t - slice_thickness])
+      linear_extrude(height = slice_thickness + e)
+        offset(delta = -t * shrink / thickness)
           children();
   }
 }
