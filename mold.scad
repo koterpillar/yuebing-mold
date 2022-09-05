@@ -38,8 +38,8 @@ difference() {
     }
   }
   translate([0, 0, thickness / 2])
-    carve(carve_thickness, carve_shrink)
-      text("fox", size = 20, halign = "center", valign = "center");
+    scale([1, 1, 0.2])
+      surface("moon_levels.png", center = true);
 }
 
 jaws_distance = 26.2;
