@@ -15,7 +15,7 @@ petal_center = 15.07;
 top_slope = 1.9;
 bottom_slope = 1;
 
-carve_thickness = 1;
+carve_thickness = 2;
 
 lunokhod_scale = 0.056 * 4;
 
@@ -54,7 +54,7 @@ module stamp() {
 }
 
 stamp() {
-  translate([0, 0, -carve_thickness + 4 * e])
+  translate([0, 0, -carve_thickness + 8 * e])
     rotate(10)
       scale([lunokhod_scale, lunokhod_scale, -carve_thickness / 100])
         surface("lunokhod_out.png", center = true, invert = true);
