@@ -1,7 +1,7 @@
-.PHONY: moon.jpg
+.PHONY: lunokhod.png
 
-moon_levels.png: landscape.py moon.jpg
-	poetry run ./landscape.py moon.jpg moon_levels.png
+lunokhod.png:
+	curl -sSL -o lunokhod.png --etag-compare lunokhod.png.etag --etag-save lunokhod.png.etag https://cs11.pikabu.ru/post_img/big/2019/11/17/5/1573975607121742309.png
 
-moon.jpg:
-	curl -sSL -o moon.jpg --etag-compare moon.jpg.etag --etag-save moon.jpg.etag https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg
+lunokhod_out.png: lunokhod.png lunokhod.py
+	poetry run ./lunokhod.py

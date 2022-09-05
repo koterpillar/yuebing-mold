@@ -1,3 +1,4 @@
+from PIL import Image
 from typing import Callable
 
 
@@ -23,6 +24,7 @@ def bands(histogram: list[int], *, smooth: int = 1, levels: int) -> Bands:
 
     return result
 
+
 def apply_bands(bands: Bands, *, maximum: int = 255) -> Callable[[int], int]:
     mapping = {}
     idx = 0
@@ -31,3 +33,10 @@ def apply_bands(bands: Bands, *, maximum: int = 255) -> Callable[[int], int]:
             idx += 1
         mapping[val] = idx * maximum // len(bands)
     return mapping.__getitem__
+
+
+def map_pixels(image: Image, fn: Callable[[int], int]) -> None:
+    pixels = image.load()
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+            pixels[i, j] = fn(pixels[i, j])
