@@ -35,8 +35,12 @@ def apply_bands(bands: Bands, *, maximum: int = 255) -> Callable[[int], int]:
     return mapping.__getitem__
 
 
-def map_pixels(image: Image, fn: Callable[[int], int]) -> None:
+def map_pixels_coord(image: Image, fn: Callable[[int, int, int], int]) -> None:
     pixels = image.load()
     for i in range(image.size[0]):
         for j in range(image.size[1]):
-            pixels[i, j] = fn(pixels[i, j])
+            pixels[i, j] = fn(pixels[i, j], i, j)
+
+
+def map_pixels(image: Image, fn: Callable[[int], int]) -> None:
+    return map_pixels_coord(image, lambda v, x, y: fn(v))
