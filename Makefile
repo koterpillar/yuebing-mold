@@ -5,3 +5,6 @@ lunokhod.png:
 
 lunokhod_out.png: lunokhod.png lunokhod.py
 	poetry run ./lunokhod.py
+
+lunokhod.stl: mold.scad lunokhod_out.png
+	openscad -o lunokhod.stl mold.scad

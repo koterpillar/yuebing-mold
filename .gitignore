@@ -1,4 +1,5 @@
 __pycache__
 *.etag
+*.stl
 lunokhod.png
 lunokhod_out.png
