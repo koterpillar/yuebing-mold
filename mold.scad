@@ -18,14 +18,28 @@ bottom_slope = 1;
 carve_thickness = 3;
 carve_shrink = 2;
 
+lunokhod_scale = 0.056;
+
+module main_cylinder() {
+  cylinder(h = thickness, r = base_r, center = true);
+}
+
 difference() {
   intersection() {
     union () {
-      cylinder(h = thickness, r = base_r, center = true);
-      for (angle = [0 : angle : full_circle - angle]) {
-        rotate([0, 0, angle])
-          translate([0, petal_center, 0])
-            cylinder(h = thickness, r = petal_r - petal_center, center = true);
+      difference() {
+        main_cylinder();
+        translate([0, 0, thickness / 2 - 2 + e])
+          scale([lunokhod_scale, lunokhod_scale, -0.02])
+            surface("lunokhod_out.png", center = true, invert = true);
+      }
+      difference() {
+        for (angle = [0 : angle : full_circle - angle]) {
+          rotate([0, 0, angle])
+            translate([0, petal_center, 0])
+              cylinder(h = thickness - e, r = petal_r - petal_center, center = true);
+        }
+        main_cylinder();
       }
     }
     union () {
@@ -37,9 +51,6 @@ difference() {
         cylinder(h = bottom_slope, r1 = base_r, r2 = petal_r, center=true);
     }
   }
-  translate([0, 0, thickness / 2])
-    scale([1, 1, 0.2])
-      surface("moon_levels.png", center = true);
 }
 
 jaws_distance = 26.2;
